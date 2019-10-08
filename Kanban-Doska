@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Kanban_Doska
 {
@@ -16,7 +17,21 @@ namespace Kanban_Doska
         {
             InitializeComponent();
         }
-        string[] jobs = {};
+
+        private void WriteToFile(string path, ListBox listBox)
+        {
+            using (var sw = new StreamWriter(new FileStream(path, FileMode.Create)))
+            {
+                if (listBox != null)
+                {
+                    foreach (var item in listBox.Items) // в таком же порядке
+                    {
+                        sw.WriteLine(item.ToString());
+                    }
+                }
+            }
+        }
+
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -39,7 +54,7 @@ namespace Kanban_Doska
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
         private void Button2_Click(object sender, EventArgs e)
         {
@@ -47,6 +62,16 @@ namespace Kanban_Doska
             {
                 listBox1.Items.Add(listBox2.SelectedItems[intCount]);
                 listBox2.Items.Remove(listBox2.SelectedItems[intCount]);
+            }
+            for (int intCount = listBox3.SelectedItems.Count - 1; intCount >= 0; intCount--)
+            {
+                listBox2.Items.Add(listBox3.SelectedItems[intCount]);
+                listBox3.Items.Remove(listBox3.SelectedItems[intCount]);
+            }
+            for (int intCount = listBox4.SelectedItems.Count - 1; intCount >= 0; intCount--)
+            {
+                listBox3.Items.Add(listBox4.SelectedItems[intCount]);
+                listBox4.Items.Remove(listBox4.SelectedItems[intCount]);
             }
         }
 
@@ -57,6 +82,16 @@ namespace Kanban_Doska
                 listBox2.Items.Add(listBox1.SelectedItems[intCount]);
                 listBox1.Items.Remove(listBox1.SelectedItems[intCount]);
             }
+            for (int intCount = listBox2.SelectedItems.Count - 1; intCount >= 0; intCount--)
+            {
+                listBox3.Items.Add(listBox2.SelectedItems[intCount]);
+                listBox2.Items.Remove(listBox2.SelectedItems[intCount]);
+            }
+            for (int intCount = listBox3.SelectedItems.Count - 1; intCount >= 0; intCount--)
+            {
+                listBox4.Items.Add(listBox3.SelectedItems[intCount]);
+                listBox3.Items.Remove(listBox3.SelectedItems[intCount]);
+            }
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -64,5 +99,14 @@ namespace Kanban_Doska
             listBox1.Items.Add(textBox1.Text);
             textBox1.Clear();
         }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            WriteToFile(@"D:\Veng\ZadKanban1.txt", listBox1);
+            WriteToFile(@"D:\Veng\ZadKanban2.txt", listBox2);
+            WriteToFile(@"D:\Veng\ZadKanban3.txt", listBox3);
+            WriteToFile(@"D:\Veng\ZadKanban4.txt", listBox4);
+        }
+        
     }
 }
